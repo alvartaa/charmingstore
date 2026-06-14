@@ -637,7 +637,7 @@
                 </div>
                 <div class="cart-total-box">
                     <h4 style="font-size: 1.2rem;">Total: <span id="cartTotalText" style="color: var(--secondary); font-size: 1.4rem;">Rp 0</span></h4>
-                    <button class="checkout-btn" onclick="checkoutAlert()">Lanjutkan Pembayaran</button>
+                    <button class="checkout-btn" onclick="sendToWhatsApp()">Lanjutkan Pembayaran</button>
                 </div>
             </div>
         </section>
@@ -861,6 +861,36 @@
             
             alert("Ulasan bermutu Anda berhasil diterbitkan!");
         }
+
+            function sendToWhatsApp() {
+    // 1. Ganti dengan nomor WhatsApp Toko Anda (gunakan kode negara 62, tanpa spasi/tanda +)
+    const whatsappNumber = "6283805553841"; 
+
+    // Cek apakah keranjang kosong
+    if (!cart || cart.length === 0) {
+        alert("Keranjang belanja Anda masih kosong!");
+        return;
+    }
+
+    // 2. Susun template pesan otomatis dari data keranjang
+    let textOrder = `*Halo Charming Store, Saya Ingin Memesan:* ✨\n\n`;
+    textOrder += `*--- DAFTAR BARANG ---*\n`;
+
+    let total = 0;
+    cart.forEach((item, index) => {
+        textOrder += `${index + 1}. ${item.name} - Rp ${item.price.toLocaleString('id-ID')}\n`;
+        total += item.price;
+    });
+
+    // Mengambil teks total yang tertera di layar
+    textOrder += `\n*Total Pembayaran:* *Rp ${total.toLocaleString('id-ID')}*\n\n`;
+    textOrder += `Mohon info detail metode pembayaran dan pengirimannya ya. Terima kasih!`;
+
+    // 3. Encode pesan dan buka WhatsApp otomatis di tab baru
+    const url = `https://api.whatsapp.com/send?phone=${whatsappNumber}&text=${encodeURIComponent(textOrder)}`;
+    window.open(url, '_blank');
+}
+
     </script>
 </body>
 </html>
